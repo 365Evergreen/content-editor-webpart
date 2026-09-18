@@ -3,10 +3,6 @@ import * as React from 'react';
 
 export interface IEditorQueryParameters {
 
-  /**
-   * Example:
-   * /sites/site/BlogPostContent/about-us.json
-   */
   file: string | null;
 }
 

@@ -1,19 +1,21 @@
-import type { JSONContent } from '@tiptap/core';
-
 import { IContentDocument } from '../models/IContentDocument';
+import { JSONContent } from '@tiptap/core';
 
 export function createEmptyDocument(): IContentDocument {
-
-  const content: JSONContent = {
+  const emptyContent: JSONContent = {
     type: 'doc',
-    content: []
+    content: [
+      {
+        type: 'paragraph',
+        content: []
+      }
+    ]
   };
 
   return {
-    id: crypto.randomUUID(),
+    postId: crypto.randomUUID(),
     title: 'New Content',
-    route: '/',
-    schemaVersion: '1.0',
-    content
+    slug: '/',
+    editorContent: emptyContent
   };
 }

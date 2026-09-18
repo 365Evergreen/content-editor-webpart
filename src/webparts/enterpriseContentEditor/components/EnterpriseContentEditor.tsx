@@ -3,6 +3,7 @@ import * as React from 'react';
 import {
   IReadonlyTheme
 } from '@microsoft/sp-component-base';
+import { SPFI } from '@pnp/sp';
 
 import {
   ContentEditorShell
@@ -14,12 +15,15 @@ export interface IEnterpriseContentEditorProps {
 
   themeVariant?:
     IReadonlyTheme;
+
+  sp: SPFI;
 }
 
 export const EnterpriseContentEditor:
 React.FC<IEnterpriseContentEditorProps> = ({
   libraryServerRelativeUrl,
-  themeVariant
+  themeVariant,
+  sp
 }) => {
 
   return (
@@ -30,6 +34,9 @@ React.FC<IEnterpriseContentEditorProps> = ({
       }
       themeVariant={
         themeVariant
+      }
+      sp={
+        sp
       }
     />
 

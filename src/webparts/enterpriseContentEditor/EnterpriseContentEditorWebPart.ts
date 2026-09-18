@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 
@@ -6,7 +7,8 @@ import {
 } from '@microsoft/sp-core-library';
 
 import {
-  BaseClientSideWebPart
+  BaseClientSideWebPart,
+  
 } from '@microsoft/sp-webpart-base';
 
 import {
@@ -37,7 +39,10 @@ export default class EnterpriseContentEditorWebPart
         {
           libraryServerRelativeUrl:
             this.properties
-              .libraryServerRelativeUrl || ''
+              .libraryServerRelativeUrl || '',
+          // provide the SharePoint context (or SP object expected by the component)
+          // cast to any to satisfy the prop type if exact type is not available here
+          sp: (this.context as any)
         }
       );
 

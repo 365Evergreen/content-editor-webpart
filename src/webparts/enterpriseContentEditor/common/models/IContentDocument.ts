@@ -1,10 +1,12 @@
-import type { JSONContent } from '@tiptap/core';
+import { JSONContent }
+  from '@tiptap/core';
 
 export interface IContentDocument {
 
-  id: string;
+  postId: string;
   title: string;
-  route: string;
-  schemaVersion: string;
-  content: JSONContent;
+  slug: string;
+  category?: string;
+  featuredImage?: string;
+  editorContent: JSONContent;
 }
