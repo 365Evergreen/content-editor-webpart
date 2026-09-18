@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "enterprise-content-editor-client-side-solution",
+    "id": "430b9ae7-8f34-40d2-9efa-612521fd67bf",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.23.2"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "enterprise-content-editor description"
+      },
+      "longDescription": {
+        "default": "enterprise-content-editor description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "enterprise-content-editor Feature",
+        "description": "The feature that activates elements of the enterprise-content-editor solution.",
+        "id": "4c2b7eb4-bacd-44c8-890f-dfe775c10d05",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/enterprise-content-editor.sppkg"
+  }
+}
