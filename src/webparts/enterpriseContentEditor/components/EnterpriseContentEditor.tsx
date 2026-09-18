@@ -13,19 +13,21 @@ import {
 export interface IEnterpriseContentEditorProps {
 
   sp: SPFI;
-  listTitle: string;
-  libraryTitle: string;
-  themeVariant?: IReadonlyTheme;
+  themeVariant?: IReadonlyTheme | undefined;
   siteUrl?: string;
+  libraryTitle: string;
+  listTitle?: string;
+  filePath: string,
 }
 
 export const EnterpriseContentEditor:
 React.FC<IEnterpriseContentEditorProps> = ({
   sp,
   siteUrl,
-  listTitle,
   libraryTitle,
-  themeVariant
+  listTitle,
+  themeVariant,
+  filePath
 }) => {
 
   return (
@@ -33,14 +35,11 @@ React.FC<IEnterpriseContentEditorProps> = ({
     <BlogContentDashboard
       sp={sp}
       siteUrl={siteUrl || ''}
+      themeVariant={themeVariant}
+      libraryTitle={libraryTitle}
       listTitle={listTitle}
-      libraryTitle={
-        libraryTitle
-      }
-      themeVariant={
-        themeVariant
-      }
-   />
+      filePath={filePath}
+      />
 
   );
 };

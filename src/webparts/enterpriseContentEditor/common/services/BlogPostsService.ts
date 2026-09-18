@@ -1,4 +1,3 @@
- 
 import { SPFI } from '@pnp/sp';
 
 import '@pnp/sp/webs';
@@ -45,19 +44,36 @@ export class BlogPostsService {
         )();
 
     return items.map(item => ({
+
       id: item.Id,
-      title: item.Title ?? '',
-      postId: item.e365_BlogPostId ?? '',
-      slug: item.e365_BlogPostSlug ?? '',
-      status: item.e365_BlogPostStatus ?? '',
+
+      title:
+        item.Title ?? '',
+
+      postId:
+        item.e365_BlogPostId ?? '',
+
+      slug:
+        item.e365_BlogPostSlug ?? '',
+
+      status:
+        item.e365_BlogPostStatus ?? '',
+
       contentFile:
         item.e365_BlogPostContent ?? '',
-      created: item.Created,
-      modified: item.Modified,
+
+      created:
+        item.Created,
+
+      modified:
+        item.Modified,
+
       author:
         item.e365_ContentAuthor?.Title,
+
       approver:
         item.e365_ContentApprover?.Title
+
     }));
   }
 }
