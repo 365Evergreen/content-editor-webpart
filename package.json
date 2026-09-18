@@ -12,15 +12,17 @@
     "start": "heft start --clean"
   },
   "dependencies": {
-    "@fluentui/react-components":"9.74.7",
-    "@fluentui/react-icons":"2.0.341",
+    "@fluentui/react-components": "9.74.7",
+    "@fluentui/react-icons": "2.0.341",
     "@microsoft/sp-component-base": "1.23.2",
     "@microsoft/sp-core-library": "1.23.2",
     "@microsoft/sp-lodash-subset": "1.23.2",
     "@microsoft/sp-office-ui-fabric-core": "1.23.2",
     "@microsoft/sp-property-pane": "1.23.2",
     "@microsoft/sp-webpart-base": "1.23.2",
-    "@tiptap/core": "3.11.0",
+    "@pnp/sp": "^4.17.0",
+    "@tiptap/core": "^3.31.3",
+     "tiptap-extension-resize-image": "^1.4.6",
     "@tiptap/extension-link": "3.11.0",
     "@tiptap/extension-underline": "3.11.0",
     "@tiptap/react": "3.11.0",
@@ -33,8 +35,8 @@
     "@microsoft/eslint-config-spfx": "1.23.2",
     "@microsoft/eslint-plugin-spfx": "1.23.2",
     "@microsoft/sp-module-interfaces": "1.23.2",
-    "@microsoft/spfx-heft-plugins": "1.23.2",
-    "@microsoft/spfx-web-build-rig": "1.23.2",
+    "@microsoft/spfx-heft-plugins": "^0.0.0",
+    "@microsoft/spfx-web-build-rig": "^1.21.1",
     "@rushstack/heft": "1.2.17",
     "@types/jest": "30.0.0",
     "@types/react": "17.0.45",
@@ -52,6 +54,9 @@
     "@types/react": "17.0.45"
   },
   "allowScripts": {
-    "unrs-resolver": true
+    "unrs-resolver": true,
+    "deasync@0.1.31": true,
+    "keytar@7.9.0": true,
+    "node-sass@4.14.1": true
   }
 }
