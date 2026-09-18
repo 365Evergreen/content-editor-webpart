@@ -1,38 +1,20 @@
 import * as React from 'react';
 
 import {
-  Button,
-  makeStyles
+  Button
 } from '@fluentui/react-components';
+
+import {
+  JSONContent
+} from '@tiptap/core';
 
 import {
   IReadonlyTheme
 } from '@microsoft/sp-component-base';
-import {TiptapEditorHost} from './TiptapEditorHost'
 
-const useStyles = makeStyles({
-
-  root: {
-    padding: '20px'
-  },
-
-  title: {
-    marginBottom: '20px'
-  },
-
-  commandBar: {
-    display: 'flex',
-    gap: '8px',
-    marginBottom: '20px'
-  },
-
-  editorSurface: {
-    border: '1px solid #d1d1d1',
-    borderRadius: '4px',
-    minHeight: '500px',
-    padding: '20px'
-  }
-});
+import {
+  TiptapEditorHost
+} from './TiptapEditorHost';
 
 export interface IContentEditorShellProps {
 
@@ -42,18 +24,84 @@ export interface IContentEditorShellProps {
     IReadonlyTheme;
 }
 
+const INITIAL_CONTENT: JSONContent = {
+  type: 'doc',
+  content: [
+    {
+      type: 'paragraph',
+      content: [
+        {
+          type: 'text',
+          text: 'Hello TipTap'
+        }
+      ]
+    }
+  ]
+};
+
 export const ContentEditorShell:
 React.FC<IContentEditorShellProps> = ({
   libraryServerRelativeUrl
 }) => {
 
-  const styles = useStyles();
+  const [
+    content,
+    setContent
+  ] = React.useState<JSONContent>(
+    INITIAL_CONTENT
+  );
+
+  const [
+    dirty,
+    setDirty
+  ] = React.useState(false);
+
+  const downloadJson = (): void => {
+
+    const blob =
+      new Blob(
+        [
+          JSON.stringify(
+            content,
+            null,
+            2
+          )
+        ],
+        {
+          type:
+            'application/json'
+        }
+      );
+
+    const url =
+      URL.createObjectURL(
+        blob
+      );
+
+    const anchor =
+      document.createElement('a');
+
+    anchor.href = url;
+
+    anchor.download =
+      'content.json';
+
+    anchor.click();
+
+    URL.revokeObjectURL(
+      url
+    );
+  };
 
   return (
 
-    <div className={styles.root}>
+    <div
+      style={{
+        padding: '20px'
+      }}
+    >
 
-      <h1 className={styles.title}>
+      <h1>
         Website Content Builder
       </h1>
 
@@ -63,9 +111,18 @@ React.FC<IContentEditorShellProps> = ({
         {libraryServerRelativeUrl}
       </div>
 
-      <div className={styles.commandBar}>
+      <div
+        style={{
+          display: 'flex',
+          gap: '8px',
+          marginTop: '20px',
+          marginBottom: '20px'
+        }}
+      >
 
-        <Button>
+        <Button
+          onClick={downloadJson}
+        >
           Download JSON
         </Button>
 
@@ -81,13 +138,38 @@ React.FC<IContentEditorShellProps> = ({
 
       </div>
 
-      
+      <div
+        style={{
+          marginBottom: '12px'
+        }}
+      >
 
-       <TiptapEditorHost />
+        {
+          dirty
+            ? 'Unsaved Changes'
+            : 'Saved'
+        }
 
       </div>
 
-  
+<TiptapEditorHost
+
+  content={content}
+
+  onContentChange={(
+    updatedContent: JSONContent
+  ) => {
+
+    setContent(
+      updatedContent
+    );
+
+    setDirty(true);
+  }}
+/>
+``
+
+    </div>
 
   );
 };

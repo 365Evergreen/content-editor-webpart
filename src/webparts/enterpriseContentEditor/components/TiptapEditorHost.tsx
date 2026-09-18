@@ -5,21 +5,47 @@ import {
   useEditor
 } from '@tiptap/react';
 
-import StarterKit from '@tiptap/starter-kit';
+import {
+  JSONContent
+} from '@tiptap/core';
+
+import {
+  EditorExtensions
+} from '../editors/EditorExtensions';
+
+import {
+  TiptapToolbar
+} from './TiptapToolbar';
+
+export interface ITiptapEditorHostProps {
+
+  content: JSONContent;
+
+  onContentChange(
+    content: JSONContent
+  ): void;
+}
 
 export const TiptapEditorHost:
-React.FC = () => {
+React.FC<ITiptapEditorHostProps> = ({
+  content,
+  onContentChange
+}) => {
 
   const editor = useEditor({
 
-    extensions: [
-      StarterKit
-    ],
+    extensions: EditorExtensions,
 
-    content:
-      '<p>Hello TipTap</p>',
+    content,
 
-    immediatelyRender: false
+    immediatelyRender: false,
+
+    onUpdate({ editor }) {
+
+      onContentChange(
+        editor.getJSON()
+      );
+    }
   });
 
   if (!editor) {
@@ -33,19 +59,25 @@ React.FC = () => {
 
   return (
 
-    <div
-      style={{
-        border: '1px solid #d1d1d1',
-        borderRadius: '4px',
-        backgroundColor: '#ffffff',
-        minHeight: '500px',
-        padding: '16px'
-      }}
-    >
+    <div>
 
-      <EditorContent
+      <TiptapToolbar
         editor={editor}
       />
+
+      <div
+        style={{
+          border: '1px solid #d1d1d1',
+          borderTop: 'none',
+          minHeight: '500px',
+          padding: '16px',
+          backgroundColor: '#ffffff'
+        }}
+      >
+        <EditorContent
+          editor={editor}
+        />
+      </div>
 
     </div>
 

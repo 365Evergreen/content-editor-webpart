@@ -1,21 +1,18 @@
 import StarterKit from '@tiptap/starter-kit';
-import Link from '@tiptap/extension-link';
+
 import Underline from '@tiptap/extension-underline';
-import ImageResize from 'tiptap-extension-resize-image';
+import Link from '@tiptap/extension-link';
 
 export const EditorExtensions = [
+
   StarterKit,
 
-  Link.configure({
-    openOnClick: false
-  }),
-      ImageResize.configure({
-        inline: true,
-        allowBase64: true,
-        HTMLAttributes: {
-          class: "resizable-image",
-        },
-      }),
-
   Underline,
+
+  Link.configure({
+    openOnClick: false,
+    autolink: true,
+    linkOnPaste: true
+  })
+
 ];
