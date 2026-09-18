@@ -16,6 +16,10 @@ import {
   TiptapEditorHost
 } from './TiptapEditorHost';
 
+import {
+  useQueryParameters
+} from '../common/utils/useQueryParameters';
+
 export interface IContentEditorShellProps {
 
   libraryServerRelativeUrl: string;
@@ -44,6 +48,17 @@ React.FC<IContentEditorShellProps> = ({
   libraryServerRelativeUrl
 }) => {
 
+  const {
+    file
+  } = useQueryParameters();
+
+  const [
+    currentFile,
+    setCurrentFile
+  ] = React.useState<string | null>(
+    null
+  );
+
   const [
     content,
     setContent
@@ -56,17 +71,32 @@ React.FC<IContentEditorShellProps> = ({
     setDirty
   ] = React.useState(false);
 
+  React.useEffect(() => {
+
+    if (!file) {
+      return;
+    }
+
+    setCurrentFile(
+      decodeURIComponent(
+        file
+      )
+    );
+
+  }, [file]);
+
   const downloadJson = (): void => {
+
+    const json =
+      JSON.stringify(
+        content,
+        null,
+        2
+      );
 
     const blob =
       new Blob(
-        [
-          JSON.stringify(
-            content,
-            null,
-            2
-          )
-        ],
+        [json],
         {
           type:
             'application/json'
@@ -84,7 +114,11 @@ React.FC<IContentEditorShellProps> = ({
     anchor.href = url;
 
     anchor.download =
-      'content.json';
+      currentFile
+        ? currentFile
+            .split('/')
+            .pop() ?? 'content.json'
+        : 'content.json';
 
     anchor.click();
 
@@ -110,6 +144,17 @@ React.FC<IContentEditorShellProps> = ({
         {' '}
         {libraryServerRelativeUrl}
       </div>
+
+      {
+        currentFile &&
+        (
+          <div>
+            File:
+            {' '}
+            {currentFile}
+          </div>
+        )
+      }
 
       <div
         style={{
@@ -152,22 +197,21 @@ React.FC<IContentEditorShellProps> = ({
 
       </div>
 
-<TiptapEditorHost
+      <TiptapEditorHost
 
-  content={content}
+        content={content}
 
-  onContentChange={(
-    updatedContent: JSONContent
-  ) => {
+        onContentChange={(
+          updatedContent
+        ) => {
 
-    setContent(
-      updatedContent
-    );
+          setContent(
+            updatedContent
+          );
 
-    setDirty(true);
-  }}
-/>
-``
+          setDirty(true);
+        }}
+      />
 
     </div>
 

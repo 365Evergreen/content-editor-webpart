@@ -32,21 +32,27 @@ React.FC<ITiptapEditorHostProps> = ({
   onContentChange
 }) => {
 
-  const editor = useEditor({
+  const editor =
+    useEditor({
 
-    extensions: EditorExtensions,
+      extensions:
+        EditorExtensions,
 
-    content,
+      content,
 
-    immediatelyRender: false,
+      immediatelyRender: false,
 
-    onUpdate({ editor }) {
+      onUpdate({
+        editor
+      }) {
 
-      onContentChange(
-        editor.getJSON()
-      );
-    }
-  });
+        onContentChange(
+          editor.getJSON()
+        );
+      }
+    });
+
+    
 
   if (!editor) {
 
@@ -70,13 +76,14 @@ React.FC<ITiptapEditorHostProps> = ({
           border: '1px solid #d1d1d1',
           borderTop: 'none',
           minHeight: '500px',
-          padding: '16px',
-          backgroundColor: '#ffffff'
+          padding: '16px'
         }}
       >
+
         <EditorContent
           editor={editor}
         />
+
       </div>
 
     </div>

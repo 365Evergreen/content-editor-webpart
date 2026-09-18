@@ -1,3 +1,4 @@
+/* eslint-disable @rushstack/no-new-null */
 import * as React from 'react';
 
 import type { Editor } from '@tiptap/core';
@@ -21,7 +22,7 @@ import {
 } from '@fluentui/react-icons';
 
 export interface ITiptapToolbarProps {
-  editor: Editor | undefined;
+  editor: Editor | null;
 }
 
 export const TiptapToolbar:
@@ -55,10 +56,11 @@ React.FC<ITiptapToolbarProps> = ({
 
   return (
 
-    <Toolbar aria-label="Editor Toolbar">
+    <Toolbar
+      aria-label="Editor Toolbar"
+    >
 
       <ToolbarButton
-        aria-label="Bold"
         appearance={
           editor.isActive('bold')
             ? 'primary'
@@ -75,7 +77,6 @@ React.FC<ITiptapToolbarProps> = ({
       />
 
       <ToolbarButton
-        aria-label="Italic"
         appearance={
           editor.isActive('italic')
             ? 'primary'
@@ -92,7 +93,6 @@ React.FC<ITiptapToolbarProps> = ({
       />
 
       <ToolbarButton
-        aria-label="Underline"
         appearance={
           editor.isActive('underline')
             ? 'primary'
@@ -109,7 +109,6 @@ React.FC<ITiptapToolbarProps> = ({
       />
 
       <ToolbarButton
-        aria-label="Heading 2"
         appearance={
           editor.isActive(
             'heading',
@@ -131,13 +130,14 @@ React.FC<ITiptapToolbarProps> = ({
       />
 
       <ToolbarButton
-        aria-label="Bullet List"
         appearance={
           editor.isActive('bulletList')
             ? 'primary'
             : 'subtle'
         }
-        icon={<TextBulletListLtrRegular />}
+        icon={
+          <TextBulletListLtrRegular />
+        }
         onClick={() =>
           editor
             .chain()
@@ -148,13 +148,14 @@ React.FC<ITiptapToolbarProps> = ({
       />
 
       <ToolbarButton
-        aria-label="Numbered List"
         appearance={
           editor.isActive('orderedList')
             ? 'primary'
             : 'subtle'
         }
-        icon={<TextNumberListLtrRegular />}
+        icon={
+          <TextNumberListLtrRegular />
+        }
         onClick={() =>
           editor
             .chain()
@@ -165,7 +166,6 @@ React.FC<ITiptapToolbarProps> = ({
       />
 
       <ToolbarButton
-        aria-label="Insert Link"
         appearance={
           editor.isActive('link')
             ? 'primary'
@@ -176,7 +176,6 @@ React.FC<ITiptapToolbarProps> = ({
       />
 
       <ToolbarButton
-        aria-label="Remove Link"
         icon={<LinkDismissRegular />}
         onClick={() =>
           editor
@@ -188,7 +187,6 @@ React.FC<ITiptapToolbarProps> = ({
       />
 
       <ToolbarButton
-        aria-label="Undo"
         icon={<ArrowUndoRegular />}
         onClick={() =>
           editor
@@ -200,7 +198,6 @@ React.FC<ITiptapToolbarProps> = ({
       />
 
       <ToolbarButton
-        aria-label="Redo"
         icon={<ArrowRedoRegular />}
         onClick={() =>
           editor
