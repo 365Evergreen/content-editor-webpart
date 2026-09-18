@@ -1,5 +1,6 @@
 /* eslint-disable no-void */
 
+
 import * as React from 'react';
 
 import {
@@ -37,7 +38,7 @@ export interface IContentEditorShellProps {
   libraryServerRelativeUrl: string;
 
   themeVariant?:
-    IReadonlyTheme;
+  IReadonlyTheme;
 }
 
 const EMPTY_CONTENT: JSONContent = {
@@ -46,297 +47,287 @@ const EMPTY_CONTENT: JSONContent = {
 };
 
 export const ContentEditorShell:
-React.FC<IContentEditorShellProps> = ({
-  sp,
-  libraryServerRelativeUrl
-}) => {
+  React.FC<IContentEditorShellProps> = ({
+    sp,
+    libraryServerRelativeUrl
+  }) => {
 
-  const {
-    file
-  } = useQueryParameters();
+    const {
+      file
+    } = useQueryParameters();
 
-  const service =
-    React.useMemo(
-      () =>
-        new SharePointDocumentService(
-          sp
-        ),
-      [sp]
-    );
+    const resolvedFilePath =
+      React.useMemo(() => {
 
-  const [
-    content,
-    setContent
-  ] = React.useState<JSONContent>(
-    EMPTY_CONTENT
-  );
+        if (!file) {
+          return null;
+        }
 
-  const [
-    dirty,
-    setDirty
-  ] = React.useState(false);
+        return decodeURIComponent(
+          file
+        );
 
-  const [
-    loading,
-    setLoading
-  ] = React.useState(true);
-
-  const [
-    currentFile,
-    setCurrentFile
-  ] = React.useState<string | null>(
-    null
-  );
-
-  React.useEffect(() => {
-
-    if (!file) {
-
-      setLoading(false);
-
-      return;
-    }
-
-    const fileName =
-      decodeURIComponent(
+      }, [file]); console.log(
+        'Query file',
         file
       );
 
-    const resolvedFilePath =
-      `${libraryServerRelativeUrl}/${fileName}`;
-
-    setCurrentFile(
+    console.log(
+      'Resolved path',
       resolvedFilePath
     );
 
-    const load =
-      async (): Promise<void> => {
-
-        try {
-
-          const loadedContent =
-            await service.loadContent(
-              resolvedFilePath
-            );
-
-          setContent(
-            loadedContent
-          );
-
-          setDirty(false);
-
-        } catch (error) {
-
-          console.error(
-            'Load failed',
-            error
-          );
-
-        } finally {
-
-          setLoading(false);
-        }
-      };
-
-    void load();
-
-  }, [
-    file,
-    libraryServerRelativeUrl,
-    service
-  ]);
-
-  const downloadJson =
-    (): void => {
-
-      const json =
-        JSON.stringify(
-          content,
-          null,
-          2
-        );
-
-      const blob =
-        new Blob(
-          [json],
-          {
-            type:
-              'application/json'
-          }
-        );
-
-      const url =
-        URL.createObjectURL(
-          blob
-        );
-
-      const anchor =
-        document.createElement(
-          'a'
-        );
-
-      anchor.href =
-        url;
-
-      anchor.download =
-        file ?? 'content.json';
-
-      anchor.click();
-
-      URL.revokeObjectURL(
-        url
+    const service =
+      React.useMemo(
+        () =>
+          new SharePointDocumentService(
+            sp
+          ),
+        [sp]
       );
-    };
 
-  const saveDraft =
-    async (): Promise<void> => {
+    const [
+      content,
+      setContent
+    ] = React.useState<JSONContent>(
+      EMPTY_CONTENT
+    );
 
-      if (!currentFile) {
+    const [
+      dirty,
+      setDirty
+    ] = React.useState(false);
 
-        window.alert(
-          'No file selected.'
-        );
+    const [
+      loading,
+      setLoading
+    ] = React.useState(true);
+
+
+    React.useEffect(() => {
+
+      if (!resolvedFilePath) {
+
+        setLoading(false);
 
         return;
       }
 
-      try {
+      const load =
+        async (): Promise<void> => {
+
+          try {
+
+            const loadedContent =
+              await service.loadContent(
+                resolvedFilePath
+              );
+
+            console.log(
+              'Loaded TipTap JSON',
+              loadedContent
+            );
+
+            setContent(
+              loadedContent
+            );
+
+            setDirty(false);
+
+          } catch (error) {
+
+            console.error(
+              'Load failed',
+              error
+            );
+
+          } finally {
+
+            setLoading(false);
+          }
+        };
+
+      void load();
+
+    }, [
+      resolvedFilePath,
+      service
+    ]);
+    const downloadJson =
+      (): void => {
+
+        const json =
+          JSON.stringify(
+            content,
+            null,
+            2
+          );
+
+        const blob =
+          new Blob(
+            [json],
+            {
+              type:
+                'application/json'
+            }
+          );
+
+        const url =
+          URL.createObjectURL(
+            blob
+          );
+
+        const anchor =
+          document.createElement(
+            'a'
+          );
+
+        anchor.href =
+          url;
+
+        anchor.download =
+          file ?? 'content.json';
+
+        anchor.click();
+
+        URL.revokeObjectURL(
+          url
+        );
+      };
+
+    const saveDraft =
+      async (): Promise<void> => {
+
+        if (!resolvedFilePath) {
+
+          window.alert(
+            'No file specified.'
+          );
+
+          return;
+        }
 
         await service.saveContent(
-          currentFile,
+          resolvedFilePath,
           content
         );
 
         setDirty(false);
+      };
 
-      } catch (error) {
+    const submitForApproval =
+      async (): Promise<void> => {
 
-        console.error(
-          'Save failed',
-          error
+        console.log(
+          'Submit For Approval',
+          file
         );
 
         window.alert(
-          'Save failed.'
+          'Submit for Approval not implemented yet.'
         );
-      }
-    };
+      };
 
-  const submitForApproval =
-    async (): Promise<void> => {
+    if (loading) {
 
-      console.log(
-        'Submit For Approval',
-        currentFile
+      return (
+        <div
+          style={{
+            padding: '20px'
+          }}
+        >
+          Loading content...
+        </div>
       );
-
-      window.alert(
-        'Submit for Approval not implemented yet.'
-      );
-    };
-
-  if (loading) {
+    }
 
     return (
+
       <div
         style={{
           padding: '20px'
         }}
       >
-        Loading content...
+
+        <h1>
+          Website Content Builder
+        </h1>
+
+        <div>
+          Library:
+          {' '}
+          {libraryServerRelativeUrl}
+        </div>
+        {
+          resolvedFilePath &&
+          (
+            <div>
+              File:
+              {' '}
+              {resolvedFilePath}
+            </div>
+          )
+        }
+        <div
+          style={{
+            display: 'flex',
+            gap: '8px',
+            marginTop: '20px',
+            marginBottom: '20px'
+          }}
+        >
+
+          <Button
+            onClick={downloadJson}
+          >
+            Download JSON
+          </Button>
+
+          <Button
+            appearance="primary"
+            onClick={saveDraft}
+          >
+            Save Draft
+          </Button>
+
+          <Button
+            onClick={submitForApproval}
+          >
+            Submit For Approval
+          </Button>
+
+        </div>
+
+        <div
+          style={{
+            marginBottom: '12px',
+            fontWeight: 600
+          }}
+        >
+          {
+            dirty
+              ? 'Unsaved Changes'
+              : 'Saved'
+          }
+        </div>
+
+        <TiptapEditorHost
+
+          content={content}
+
+          onContentChange={(
+            updatedContent
+          ) => {
+
+            setContent(
+              updatedContent
+            );
+
+            setDirty(true);
+          }}
+        />
+
       </div>
+
     );
   }
-
-  return (
-
-    <div
-      style={{
-        padding: '20px'
-      }}
-    >
-
-      <h1>
-        Website Content Builder
-      </h1>
-
-      <div>
-        Library:
-        {' '}
-        {libraryServerRelativeUrl}
-      </div>
-
-      {
-        currentFile &&
-        (
-          <div>
-            File:
-            {' '}
-            {currentFile}
-          </div>
-        )
-      }
-
-      <div
-        style={{
-          display: 'flex',
-          gap: '8px',
-          marginTop: '20px',
-          marginBottom: '20px'
-        }}
-      >
-
-        <Button
-          onClick={downloadJson}
-        >
-          Download JSON
-        </Button>
-
-        <Button
-          appearance="primary"
-          onClick={saveDraft}
-        >
-          Save Draft
-        </Button>
-
-        <Button
-          onClick={submitForApproval}
-        >
-          Submit For Approval
-        </Button>
-
-      </div>
-
-      <div
-        style={{
-          marginBottom: '12px',
-          fontWeight: 600
-        }}
-      >
-        {
-          dirty
-            ? 'Unsaved Changes'
-            : 'Saved'
-        }
-      </div>
-
-      <TiptapEditorHost
-
-        content={content}
-
-        onContentChange={(
-          updatedContent
-        ) => {
-
-          setContent(
-            updatedContent
-          );
-
-          setDirty(true);
-        }}
-      />
-
-    </div>
-
-  );
-};

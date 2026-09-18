@@ -1,44 +1,46 @@
 import * as React from 'react';
 
-import {
-  IReadonlyTheme
-} from '@microsoft/sp-component-base';
 import { SPFI } from '@pnp/sp';
 
 import {
-  ContentEditorShell
-} from './ContentEditorShell';
+  IReadonlyTheme
+} from '@microsoft/sp-component-base';
+
+import {
+  BlogContentDashboard
+} from './BlogContentDashboard';
 
 export interface IEnterpriseContentEditorProps {
 
-  libraryServerRelativeUrl: string;
-
-  themeVariant?:
-    IReadonlyTheme;
-
   sp: SPFI;
+  listTitle: string;
+  libraryTitle: string;
+  themeVariant?: IReadonlyTheme;
+  siteUrl?: string;
 }
 
 export const EnterpriseContentEditor:
 React.FC<IEnterpriseContentEditorProps> = ({
-  libraryServerRelativeUrl,
-  themeVariant,
-  sp
+  sp,
+  siteUrl,
+  listTitle,
+  libraryTitle,
+  themeVariant
 }) => {
 
   return (
 
-    <ContentEditorShell
-      libraryServerRelativeUrl={
-        libraryServerRelativeUrl
+    <BlogContentDashboard
+      sp={sp}
+      siteUrl={siteUrl || ''}
+      listTitle={listTitle}
+      libraryTitle={
+        libraryTitle
       }
       themeVariant={
         themeVariant
       }
-      sp={
-        sp
-      }
-    />
+   />
 
   );
 };

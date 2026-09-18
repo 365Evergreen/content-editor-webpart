@@ -32,27 +32,53 @@ React.FC<ITiptapEditorHostProps> = ({
   onContentChange
 }) => {
 
-  const editor =
-    useEditor({
+  const editor = useEditor({
 
-      extensions:
-        EditorExtensions,
+    extensions: EditorExtensions,
 
-      content,
+    content,
 
-      immediatelyRender: false,
+    immediatelyRender: false,
 
-      onUpdate({
-        editor
-      }) {
+    onUpdate({ editor }) {
 
-        onContentChange(
-          editor.getJSON()
-        );
-      }
-    });
+      onContentChange(
+        editor.getJSON()
+      );
+    }
+  });
 
-    
+  /**
+   * Keep TipTap synchronised with
+   * asynchronously loaded content.
+   */
+  React.useEffect(() => {
+
+    if (!editor) {
+      return;
+    }
+
+    const current =
+      editor.getJSON();
+
+    const next =
+      JSON.stringify(content);
+
+    const existing =
+      JSON.stringify(current);
+
+    if (existing === next) {
+      return;
+    }
+
+    editor.commands.setContent(
+      content
+    );
+
+  }, [
+    editor,
+    content
+  ]);
 
   if (!editor) {
 
@@ -76,7 +102,8 @@ React.FC<ITiptapEditorHostProps> = ({
           border: '1px solid #d1d1d1',
           borderTop: 'none',
           minHeight: '500px',
-          padding: '16px'
+          padding: '16px',
+          backgroundColor: '#ffffff'
         }}
       >
 

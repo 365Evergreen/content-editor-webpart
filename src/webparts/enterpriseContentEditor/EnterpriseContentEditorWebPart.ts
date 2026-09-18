@@ -24,6 +24,7 @@ import {
 export interface IEnterpriseContentEditorWebPartProps {
 
   libraryServerRelativeUrl: string;
+  listTitle: string;
 }
 
 export default class EnterpriseContentEditorWebPart
@@ -40,6 +41,9 @@ export default class EnterpriseContentEditorWebPart
           libraryServerRelativeUrl:
             this.properties
               .libraryServerRelativeUrl || '',
+          listTitle:
+            this.properties
+              .listTitle || '',
           // provide the SharePoint context (or SP object expected by the component)
           // cast to any to satisfy the prop type if exact type is not available here
           sp: (this.context as any)
@@ -82,7 +86,13 @@ export default class EnterpriseContentEditorWebPart
                 'Content Repository',
 
               groupFields: [
-
+PropertyPaneTextField(
+  'listTitle',
+  {
+    label:
+      'Blog posts list'
+  }
+),
                 PropertyPaneTextField(
                   'libraryServerRelativeUrl',
                   {
